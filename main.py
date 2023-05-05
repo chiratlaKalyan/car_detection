@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from ultralytics import YOLO
 from tracker import*
+from readTextFromNumPlate import*
 
 #Assign pre-trained weights
 #model=YOLO('runs/detect/yolov8n_cars_custom/weights/best.pt')
@@ -26,6 +27,7 @@ class_list = data.split("\n")
 
 
 tracker=Tracker()
+readImage=readImage()
 count=0
 car_count=1
 vh_down={}
@@ -66,19 +68,21 @@ while True:
         x3,y3,x4,y4,id=bbox
         cx=int(x3+x4)//2
         cy=int(y3+y4)//2
-        #print('TERROR',str(cx),str(cy))
         if cy1 < (cy+offset) and cy1 > (cy-offset):
            cv2.circle(frame,(cx,cy),4,(255,0,0),-1)
            cv2.putText(frame,str(car_count),(cx,cy),cv2.FONT_HERSHEY_COMPLEX,0.8,(0,255,255),2)
-           cv2.
+           #saving image
+           image_name='images/detected_car'+str(car_count)+'.jpg'
+           if not cv2.imwrite(image_name,frame):
+                  raise Exception("Could not write image")
+           else:
+               print(image_name)
+               readImage.readTextFromNumPlate(image_name)
            car_count+=1
 
 
-    #Border1
-    cv2.line(frame,(179,cy1),(850,cy1),(255,255,255),1)
-    cv2.putText(frame, "Border1", (178, cy1), cv2.FONT_HERSHEY_COMPLEX, 0.8, (243, 250, 18), 2)
 
-    cv2.imshow("RGB", frame)
+    cv2.imshow("BR Vehicle Tracking", frame)
     if cv2.waitKey(0)&0xFF==27:
         break
 cap.release()

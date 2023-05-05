@@ -5,8 +5,9 @@ import numpy as np
 import pytesseract
 from PIL import Image
 
-def readTextFromNumPlate(img):
-  try:
+class readImage():
+ def readTextFromNumPlate(self,img):
+    try:
       img = cv2.imread(img, cv2.IMREAD_COLOR)
       img = cv2.resize(img, (620, 480))
       gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # convert to grey scale
@@ -56,16 +57,13 @@ def readTextFromNumPlate(img):
       cv2.destroyAllWindows()
       #print("Detected Number is:", text)
       return text
-  except:
+    except:
       print("Exception occured reading image")
       return "FAILED TO READ"
-  finally:
+    finally:
       # cv2.imshow('image', img)
       # cv2.imshow('Cropped', Cropped)
       # cv2.waitKey(0)
       cv2.destroyAllWindows()
 # Function End here.
 
-#for img in os.listdir('./dataset'):
-text=readTextFromNumPlate('dataset/1.jpeg')
-print("Detected Number is:"+text)
